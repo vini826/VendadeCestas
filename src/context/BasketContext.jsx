@@ -1,15 +1,14 @@
 // src/context/BasketContext.jsx
 import React, { createContext, useState, useContext } from 'react';
-import products from '../data/products'; // Ainda vamos usar os produtos aqui para o mock
+import products from '../data/products';
 
-// 1. Criar o Contexto
 export const BasketContext = createContext();
 
-// 2. Criar o Provedor (Provider)
 export const BasketProvider = ({ children }) => {
   const [basket, setBasket] = useState([]);
 
-  // Lógica de adição de item (copiada de Home.jsx)
+  // ... (suas funções handleAdd, handleIncrementQuantity, handleDecrementQuantity, handleRemove aqui) ...
+
   const handleAdd = (productToAdd) => {
     const existingItemIndex = basket.findIndex(
       (item) => item.product.id === productToAdd.id
@@ -24,7 +23,6 @@ export const BasketProvider = ({ children }) => {
     }
   };
 
-  // Lógica de incremento de quantidade (copiada de Home.jsx)
   const handleIncrementQuantity = (productIdToIncrement) => {
     setBasket((prevBasket) =>
       prevBasket.map((item) =>
@@ -35,7 +33,6 @@ export const BasketProvider = ({ children }) => {
     );
   };
 
-  // Lógica de decremento de quantidade (copiada de Home.jsx)
   const handleDecrementQuantity = (productIdToDecrement) => {
     setBasket((prevBasket) =>
       prevBasket
@@ -45,26 +42,28 @@ export const BasketProvider = ({ children }) => {
           }
           return item;
         })
-        .filter((item) => item.quantity > 0) // Remove se a quantidade chegar a 0
+        .filter((item) => item.quantity > 0)
     );
   };
 
-  // Lógica de remoção completa do item (copiada de Home.jsx)
   const handleRemove = (productIdToRemove) => {
     setBasket((prevBasket) =>
       prevBasket.filter((item) => item.product.id !== productIdToRemove)
     );
   };
 
-  // O valor que será fornecido para os componentes que consumirem este contexto
+  // NOVA FUNÇÃO: Limpar a cesta
+  const clearBasket = () => {
+    setBasket([]);
+  };
+
   const contextValue = {
     basket,
     handleAdd,
     handleIncrementQuantity,
     handleDecrementQuantity,
     handleRemove,
-    // Você pode adicionar o total da cesta aqui também se quiser!
-    // Ex: basketTotal: basket.reduce((acc, item) => acc + item.product.price * item.quantity, 0)
+    clearBasket, // <-- Adicione a nova função ao valor do contexto
   };
 
   return (
@@ -74,7 +73,6 @@ export const BasketProvider = ({ children }) => {
   );
 };
 
-// 3. Criar um Hook customizado para facilitar o consumo
 export const useBasket = () => {
   return useContext(BasketContext);
 };

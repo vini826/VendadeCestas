@@ -4,7 +4,8 @@ import { useBasket } from '../context/BasketContext';
 import { useNavigate } from 'react-router-dom';
 
 export default function CheckoutPage() {
-  const { basket, handleRemove, handleIncrementQuantity, handleDecrementQuantity } = useBasket();
+  // Pegue a função clearBasket do contexto
+  const { basket, handleRemove, handleIncrementQuantity, handleDecrementQuantity, clearBasket } = useBasket();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -14,9 +15,8 @@ export default function CheckoutPage() {
     zip: '',
     email: '',
     phone: '',
-    // Novos campos para data e hora de entrega
-    deliveryDate: '', // Armazenará a data
-    deliveryTime: '', // Armazenará a hora
+    deliveryDate: '',
+    deliveryTime: '',
   });
 
   const total = basket.reduce(
@@ -34,26 +34,39 @@ export default function CheckoutPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Você pode adicionar validações aqui para deliveryDate e deliveryTime
+
     if (!formData.deliveryDate || !formData.deliveryTime) {
         alert("Por favor, selecione a data e o horário de entrega.");
-        return; // Impede o envio se os campos não estiverem preenchidos
+        return;
     }
 
-    console.log("Pedido Finalizado!", { basket, formData, total });
-    alert("Seu pedido foi finalizado com sucesso! Data de entrega: " + formData.deliveryDate + " às " + formData.deliveryTime);
-    navigate('/');
+    // Capture todos os detalhes do pedido antes de limpar a cesta
+    const orderDetails = {
+      basket: [...basket], // Crie uma cópia do basket atual
+      formData: { ...formData }, // Crie uma cópia dos dados do formulário
+      total: total,
+      orderId: Math.floor(Math.random() * 1000000), // Simula um ID de pedido
+      orderDate: new Date().toISOString().split('T')[0],
+    };
+
+    console.log("Pedido Finalizado!", orderDetails);
+    alert("Seu pedido foi finalizado com sucesso!"); // Mantido para feedback imediato
+
+    clearBasket(); // <-- CHAMA A FUNÇÃO PARA LIMPAR A CESTA
+
+    // Redireciona para a página de confirmação, passando os detalhes do pedido via state
+    navigate('/confirmacao-pedido', { state: { orderDetails } });
   };
 
-  // Funções auxiliares para definir min/max data se necessário
   const getMinDate = () => {
     const today = new Date();
-    today.setDate(today.getDate() + 1); // Dia seguinte ao atual
-    return today.toISOString().split('T')[0]; // Formato YYYY-MM-DD
+    today.setDate(today.getDate() + 1);
+    return today.toISOString().split('T')[0];
   };
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
+      {/* ... (resto do seu JSX da CheckoutPage) ... */}
       <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">Finalizar Pedido</h1>
 
       {basket.length === 0 ? (
@@ -89,7 +102,7 @@ export default function CheckoutPage() {
           <div className="bg-white p-6 rounded-xl shadow-md">
             <h2 className="text-2xl font-semibold mb-4 text-gray-700">Dados de Entrega</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Campos de Nome, Endereço, Cidade, CEP, Email, Telefone (mantidos iguais) */}
+              {/* Campos de Nome, Endereço, Cidade, CEP, Email, Telefone */}
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nome Completo</label>
                 <input
@@ -165,7 +178,7 @@ export default function CheckoutPage() {
                 />
               </div>
 
-              {/* NOVOS CAMPOS: Data e Hora de Entrega */}
+              {/* Campos: Data e Hora de Entrega */}
               <h3 className="text-xl font-semibold mt-6 mb-2 text-gray-700">Data e Hora de Entrega</h3>
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -177,7 +190,7 @@ export default function CheckoutPage() {
                     value={formData.deliveryDate}
                     onChange={handleChange}
                     required
-                    min={getMinDate()} // Impede seleção de datas passadas (a partir do dia seguinte)
+                    min={getMinDate()}
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>

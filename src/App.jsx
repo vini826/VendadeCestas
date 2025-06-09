@@ -4,18 +4,17 @@ import Navbar from "./components/Navbar";
 import LandingPage from "./pages/LandingPage";
 import Home from "./pages/Home";
 import CheckoutPage from "./pages/CheckoutPage";
+import OrderConfirmationPage from "./pages/OrderConfirmationPage"; // <-- Importe a nova página de confirmação
 import { BasketProvider } from "./context/BasketContext";
 
 function App() {
   return (
     <Router>
-      {/* O BasketProvider DEVE envolver TODAS as rotas que precisam da cesta */}
       <BasketProvider>
         <Navbar />
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/monte-sua-cesta" element={<Home />} />
-          {/* As rotas /carrinho e /checkout também estão dentro do Provider */}
           <Route path="/carrinho" element={
               <div className="p-6 bg-gray-100 min-h-screen flex justify-center items-start">
                   <div className="w-full max-w-md bg-white p-8 rounded-xl shadow-md">
@@ -33,6 +32,7 @@ function App() {
               </div>
           } />
           <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/confirmacao-pedido" element={<OrderConfirmationPage />} /> {/* <-- Nova rota para confirmação */}
           <Route path="*" element={
               <div className="p-8 text-center min-h-screen bg-red-100 flex flex-col justify-center items-center">
                   <h1 className="text-5xl font-bold text-red-700 mb-4">404 - Página Não Encontrada</h1>
@@ -41,7 +41,7 @@ function App() {
               </div>
           } />
         </Routes>
-      </BasketProvider> {/* Fechamento do BasketProvider */}
+      </BasketProvider>
     </Router>
   );
 }
