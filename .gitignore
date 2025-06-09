@@ -19,17 +19,35 @@ dist-ssr/
 .pnpm-store/
 .yarn/
 tmp/
-.env
-.env.*.local
-.DS_Store
-Thumbs.db
+.env             # Arquivos de variáveis de ambiente
+.env.*.local     # Arquivos de variáveis de ambiente locais específicos
+.DS_Store        # Arquivos de sistema do macOS
+Thumbs.db        # Arquivos de sistema do Windows
+.env.development.local # Específico para desenvolvimento local
+.env.test.local        # Específico para testes locais
+.env.production.local  # Específico para produção local
 
 # Vite specific
-.vite/
+.vite/           # Cache de desenvolvimento do Vite
+coverage/        # Pasta de relatórios de cobertura de testes (se usar)
 
 # Editor/OS specific
-.vscode/
-.idea/
+.vscode/         # Configurações do VS Code (exceto settings.json, que pode ser útil compartilhar)
+.idea/           # Configurações do WebStorm/IntelliJ IDEA
 *.swp
 *.bak
 *.swo
+
+# Dependências de package managers (se não for usar yarn berry, pnpm, etc. e quiser ignorar cache)
+package-lock.json # Se usar yarn.lock, pode ignorar
+yarn.lock         # Se usar package-lock.json, pode ignorar
+
+# Gerenciadores de pacotes alternativos (se estiver usando)
+.pnpm-state.json
+.pnpm-state-dl.yaml
+.yarn-cache/
+.npmrc # Pode conter tokens, mas depende do caso de uso
+
+# Arquivos de Build/Compilação Adicionais
+build/          # Outros diretórios de build comuns
+out/            # Outros diretórios de build comuns
