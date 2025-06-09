@@ -1,12 +1,12 @@
 // src/App.jsx
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"; // Adicione Link aqui para a rota 404
+import { HashRouter as Router, Routes, Route, Link } from "react-router-dom"; // <-- Mude BrowserRouter para HashRouter
 import Navbar from "./components/Navbar";
 import LandingPage from "./pages/LandingPage";
 import Home from "./pages/Home";
 
 function App() {
   return (
-    <Router>
+    <Router> {/* <-- Continua sendo Router, mas agora é o HashRouter */}
       <Navbar />
       <Routes>
         <Route path="/" element={<LandingPage />} />
