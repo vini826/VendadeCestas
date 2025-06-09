@@ -1,6 +1,6 @@
 # 🎁 Cesta Perfeita - Monte Sua Cesta Personalizada!
 
-[![GitHub Pages](https://github.com/vini826/VendadeCestas/actions/workflows/github-pages.yml/badge.svg)](https://vini826.github.io/VendadeCestas/)
+[![GitHub Pages](https://github.com/vini826/VendadeCestas/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/vini826/VendadeCestas/actions/workflows/pages/pages-build-deployment)
 [![GitHub last commit](https://img.shields.io/github/last-commit/vini826/VendadeCestas)](https://github.com/vini826/VendadeCestas/commits/main)
 
 Bem-vindo ao projeto **Cesta Perfeita**, um site interativo onde você pode montar sua própria cesta de produtos personalizados, como chocolates, vinhos e flores! A aplicação calcula o valor total automaticamente enquanto você adiciona ou ajusta a quantidade dos itens.
