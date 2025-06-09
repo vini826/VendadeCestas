@@ -47,7 +47,7 @@ Siga estas instruções para configurar e rodar o projeto em sua máquina local:
 1.  **Clone o repositório:**
     ```bash
     git clone [https://github.com/vini826/VendadeCestas.git](https://github.com/vini826/VendadeCestas.git)
-    cd cesta
+    cd VendadeCestas
     ```
 
 2.  **Instale as dependências:**
@@ -70,7 +70,7 @@ Siga estas instruções para configurar e rodar o projeto em sua máquina local:
 Este projeto está configurado para ser automaticamente publicado no GitHub Pages.
 
 **Link do Projeto Publicado:**
-[https://vini826.github.io/cesta/](https://vini826.github.io/cesta/)
+[https://vini826.github.io/VendadeCestas/](https://vini826.github.io/VendadeCestas/)
 
 Para mais informações sobre como configurar o deploy de projetos Vite no GitHub Pages, consulte a documentação oficial ou os scripts no `package.json`.
 
@@ -92,7 +92,4 @@ Contribuições são bem-vindas! Se você tiver sugestões, melhorias ou encontr
 
 ---
 
-## 📄 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes. (Se você quiser adicionar uma licença, crie um arquivo `LICENSE` na raiz do seu projeto e escolha uma licença, como a MIT, que é muito comum).
 
