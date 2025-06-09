@@ -47,7 +47,7 @@ Siga estas instruções para configurar e rodar o projeto em sua máquina local:
 1.  **Clone o repositório:**
     ```bash
     git clone [https://github.com/vini826/VendadeCestas.git](https://github.com/vini826/VendadeCestas.git)
-    cd cesta
+    cd VendadeCestas
     ```
 
 2.  **Instale as dependências:**
