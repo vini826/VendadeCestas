@@ -1,57 +1,18 @@
-import { useState } from "react";
+// src/pages/Home.jsx
 import products from "../data/products";
 import ProductCard from "../components/ProductCard";
 import Basket from "../components/Basket";
+import { useBasket } from '../context/BasketContext'; // Correto, você já importou
 
 export default function Home() {
-  const [basket, setBasket] = useState([]);
-
-  const handleAdd = (productToAdd) => {
-    const existingItemIndex = basket.findIndex(
-      (item) => item.product.id === productToAdd.id
-    );
-
-    if (existingItemIndex > -1) {
-      const newBasket = [...basket];
-      newBasket[existingItemIndex].quantity += 1;
-      setBasket(newBasket);
-    } else {
-      setBasket([...basket, { product: productToAdd, quantity: 1 }]);
-    }
-  };
-
-  // Nova função para incrementar a quantidade
-  const handleIncrementQuantity = (productIdToIncrement) => {
-    setBasket((prevBasket) =>
-      prevBasket.map((item) =>
-        item.product.id === productIdToIncrement
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      )
-    );
-  };
-
-  // Nova função para decrementar a quantidade
-  const handleDecrementQuantity = (productIdToDecrement) => {
-    setBasket((prevBasket) =>
-      prevBasket
-        .map((item) => {
-          if (item.product.id === productIdToDecrement) {
-            // Decrementa a quantidade, mas não deixa ser menor que 1
-            return { ...item, quantity: Math.max(1, item.quantity - 1) };
-          }
-          return item;
-        })
-        .filter((item) => item.quantity > 0) // Remove o item se a quantidade chegar a 0 (opcional, pode ser feito apenas com o botão "Remover")
-    );
-  };
-
-  // A função handleRemove agora será usada especificamente para remover o item *completamente*
-  const handleRemove = (productIdToRemove) => {
-    setBasket((prevBasket) =>
-      prevBasket.filter((item) => item.product.id !== productIdToRemove)
-    );
-  };
+  
+  const {
+    basket,
+    handleAdd,
+    handleIncrementQuantity,
+    handleDecrementQuantity,
+    handleRemove
+  } = useBasket(); // <-- ESSA É A LINHA CRÍTICA!
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
@@ -62,12 +23,12 @@ export default function Home() {
             <ProductCard key={product.id} product={product} onAdd={handleAdd} />
           ))}
         </div>
-        {/* Passamos as novas funções para o componente Basket */}
+        {/* Passamos as funções que VIERAM DO CONTEXTO para o componente Basket */}
         <Basket
           basket={basket}
           onIncrementQuantity={handleIncrementQuantity}
           onDecrementQuantity={handleDecrementQuantity}
-          onRemove={handleRemove} // onRemove agora remove o item por completo
+          onRemove={handleRemove}
         />
       </div>
     </div>

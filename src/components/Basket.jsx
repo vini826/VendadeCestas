@@ -1,10 +1,15 @@
+// src/components/Basket.jsx
+import React from 'react';
+import { useNavigate } from 'react-router-dom'; // <-- Importe useNavigate
+
 export default function Basket({
   basket,
   onIncrementQuantity,
   onDecrementQuantity,
-  onRemove, // onRemove agora remove o item por completo
+  onRemove,
 }) {
-  // O cálculo do total continua o mesmo, considerando a quantidade de cada item
+  const navigate = useNavigate(); // <-- Inicialize o hook useNavigate
+
   const total = basket.reduce(
     (acc, item) => acc + item.product.price * item.quantity,
     0
@@ -56,7 +61,17 @@ export default function Basket({
         </ul>
       )}
       <hr className="my-4" />
-      <p className="font-bold text-xl">Total: R$ {total.toFixed(2)}</p>
+      <p className="font-bold text-xl mb-4">Total: R$ {total.toFixed(2)}</p> {/* Adicionado mb-4 para espaçamento */}
+
+      {/* Botão Finalizar Pedido - SÓ APARECE SE HOUVER ITENS NA CESTA */}
+      {basket.length > 0 && (
+        <button
+          onClick={() => navigate('/checkout')} // Ao clicar, navega para a rota /checkout
+          className="w-full bg-green-500 text-white font-bold py-2 rounded-lg hover:bg-green-600 transition duration-300"
+        >
+          Finalizar Pedido
+        </button>
+      )}
     </div>
   );
 }
