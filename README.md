@@ -31,12 +31,12 @@ Este projeto foi desenvolvido como um exercício prático de front-end, exploran
 ## 📦 Estrutura do Projeto
 
 src/
-├── components/ # Componentes reutilizáveis (e.g., ProductCard, Basket, Navbar)
-├── pages/ # Páginas completas da aplicação (e.g., Home, LandingPage)
-├── data/ # Dados mockados (e.g., products.js, preBuiltBaskets.js)
-├── App.jsx # Componente raiz que gerencia as rotas
-├── main.jsx # Ponto de entrada da aplicação React
-└── index.css # Estilos globais e importação do TailwindCSS
+├── components/           # Componentes reutilizáveis (e.g., ProductCard, Basket, Navbar)
+├── pages/                # Páginas completas da aplicação (e.g., Home, LandingPage)
+├── data/                 # Dados mockados (e.g., products.js, preBuiltBaskets.js)
+├── App.jsx               # Componente raiz que gerencia as rotas
+├── main.jsx              # Ponto de entrada da aplicação React
+└── index.css             # Estilos globais e importação do TailwindCSS
 
 ## ▶️ Como Rodar o Projeto Localmente
 
