@@ -1,10 +1,9 @@
 // src/pages/CheckoutPage.jsx
 import React, { useState } from 'react';
 import { useBasket } from '../context/BasketContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; // <-- Importe Link aqui!
 
 export default function CheckoutPage() {
-  // Pegue a função handleRemove do contexto
   const { basket, handleRemove, handleIncrementQuantity, handleDecrementQuantity, clearBasket } = useBasket();
   const navigate = useNavigate();
 
@@ -36,7 +35,7 @@ export default function CheckoutPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (basket.length === 0) { // Adicionado verificação para cesta vazia antes de finalizar
+    if (basket.length === 0) {
       alert("Sua cesta está vazia! Adicione produtos antes de finalizar o pedido.");
       return;
     }
@@ -75,12 +74,20 @@ export default function CheckoutPage() {
       {basket.length === 0 ? (
         <div className="text-center bg-white p-8 rounded-xl shadow-md max-w-md mx-auto">
           <p className="text-gray-600 text-lg mb-4">Sua cesta está vazia. Adicione produtos para finalizar o pedido.</p>
-          <button
-            onClick={() => navigate('/monte-sua-cesta')}
-            className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300"
-          >
-            Voltar para Montar Cesta
-          </button>
+          <div className="flex flex-col space-y-4"> {/* Adicionado um flex container para os botões */}
+            <button
+              onClick={() => navigate('/monte-sua-cesta')}
+              className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300"
+            >
+              Voltar para Montar Cesta
+            </button>
+            <Link // <-- NOVO BOTÃO: Ir para a página inicial
+              to="/"
+              className="bg-gray-300 text-gray-800 px-6 py-2 rounded-lg hover:bg-gray-400 transition duration-300"
+            >
+              Voltar para a Página Inicial
+            </Link>
+          </div>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
@@ -94,9 +101,8 @@ export default function CheckoutPage() {
                     <span className="font-medium">{item.product.name}</span> (x{item.quantity})
                     <span className="text-gray-600 ml-2">R$ {(item.product.price * item.quantity).toFixed(2)}</span>
                   </div>
-                  {/* NOVO BOTÃO REMOVER AQUI */}
                   <button
-                    onClick={() => handleRemove(item.product.id)} // Chama a função handleRemove do contexto
+                    onClick={() => handleRemove(item.product.id)}
                     className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 text-sm ml-4"
                   >
                     Remover
@@ -226,7 +232,7 @@ export default function CheckoutPage() {
                   onChange={handleChange}
                   rows="4"
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500 resize-y"
-                  placeholder="Digite aqui quaisquer instruções especiais ou observações..."
+                  placeholder="Digite aqui quaisquer instruções especiais ou observações para o entregador..."
                 ></textarea>
               </div>
 
