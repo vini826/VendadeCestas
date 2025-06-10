@@ -1,6 +1,8 @@
 // src/pages/LandingPage.jsx
 import React from "react";
 import { Link } from "react-router-dom"; 
+// Você pode importar os dados das cestas aqui para renderizá-los dinamicamente
+import preBuiltBaskets from '../data/preBuiltBaskets'; // <-- Importe os dados
 
 export default function LandingPage() {
   return (
@@ -12,30 +14,25 @@ export default function LandingPage() {
         Explore nossas opções de cestas pré-montadas ou crie a sua própria cesta personalizada com os itens que você mais ama!
       </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-5xl"> {/* Adicionado w-full e max-w para controle de largura */}
-        {/* Cestas pré-montadas existentes */}
-        <div className="bg-white rounded-xl shadow-lg p-6 text-center transform hover:scale-105 transition duration-300">
-          <h3 className="text-2xl font-bold text-purple-700 mb-2">Cesta Romântica</h3>
-          <p className="text-gray-700">Chocolates, vinho e flores.</p>
-          <span className="text-xl font-semibold text-green-600 mt-4 block">R$ 150,00</span>
-          <button className="mt-4 bg-purple-500 text-white px-6 py-2 rounded-lg hover:bg-purple-600 transition duration-300">Ver Detalhes</button>
-        </div>
-        <div className="bg-white rounded-xl shadow-lg p-6 text-center transform hover:scale-105 transition duration-300">
-          <h3 className="text-2xl font-bold text-orange-700 mb-2">Cesta Gourmet</h3>
-          <p className="text-gray-700">Queijos, patês e geleias finas.</p>
-          <span className="text-xl font-semibold text-green-600 mt-4 block">R$ 220,00</span>
-          <button className="mt-4 bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition duration-300">Ver Detalhes</button>
-        </div>
-        <div className="bg-white rounded-xl shadow-lg p-6 text-center transform hover:scale-105 transition duration-300">
-          <h3 className="text-2xl font-bold text-blue-700 mb-2">Cesta Café da Manhã</h3>
-          <p className="text-gray-700">Pães frescos, sucos e frutas.</p>
-          <span className="text-xl font-semibold text-green-600 mt-4 block">R$ 100,00</span>
-          <button className="mt-4 bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300">Ver Detalhes</button>
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Renderize as cestas pré-montadas dinamicamente usando os dados */}
+        {preBuiltBaskets.map(basket => (
+          <div key={basket.id} className="bg-white rounded-xl shadow-lg p-6 text-center transform hover:scale-105 transition duration-300">
+            <h3 className="text-2xl font-bold text-purple-700 mb-2">{basket.name}</h3>
+            <p className="text-gray-700">{basket.description.substring(0, 50)}...</p> {/* Exibe uma parte da descrição */}
+            <span className="text-xl font-semibold text-green-600 mt-4 block">R$ {basket.price.toFixed(2)}</span>
+            <Link 
+              to={`/cestas/${basket.id}`} // <-- LINK PARA A PÁGINA DE DETALHES
+              className="mt-4 inline-block bg-purple-500 text-white px-6 py-2 rounded-lg hover:bg-purple-600 transition duration-300"
+            >
+              Ver Detalhes
+            </Link>
+          </div>
+        ))}
         
-        {/* Nova div para centralizar a opção "Monte sua Cesta" */}
-        <div className="col-span-full flex justify-center"> {/* Ocupa todas as colunas e centraliza o conteúdo */}
-          <div className="bg-white rounded-xl shadow-lg p-6 text-center transform hover:scale-105 transition duration-300 w-full max-w-sm"> {/* Adicionado max-w-sm para controlar a largura do card */}
+        {/* Card "Monte sua Cesta" (mantido) */}
+        <div className="col-span-full flex justify-center">
+          <div className="bg-white rounded-xl shadow-lg p-6 text-center transform hover:scale-105 transition duration-300 w-full max-w-sm">
             <h3 className="text-2xl font-bold text-blue-700 mb-2">Monte sua Cesta</h3>
             <div className="flex items-center justify-center text-center gap-1">
               <p className="text-gray-700">Preço mínimo:</p>
@@ -50,8 +47,6 @@ export default function LandingPage() {
           </div>
         </div>
       </div>
-      
-      {/* O parágrafo extra foi removido, pois o link "Monte sua Cesta" já está no card */}
     </div>
   );
 }

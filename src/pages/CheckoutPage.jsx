@@ -4,7 +4,7 @@ import { useBasket } from '../context/BasketContext';
 import { useNavigate } from 'react-router-dom';
 
 export default function CheckoutPage() {
-  // Pegue a função clearBasket do contexto
+  // Pegue a função handleRemove do contexto
   const { basket, handleRemove, handleIncrementQuantity, handleDecrementQuantity, clearBasket } = useBasket();
   const navigate = useNavigate();
 
@@ -17,6 +17,7 @@ export default function CheckoutPage() {
     phone: '',
     deliveryDate: '',
     deliveryTime: '',
+    observations: '',
   });
 
   const total = basket.reduce(
@@ -35,26 +36,29 @@ export default function CheckoutPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    if (basket.length === 0) { // Adicionado verificação para cesta vazia antes de finalizar
+      alert("Sua cesta está vazia! Adicione produtos antes de finalizar o pedido.");
+      return;
+    }
+
     if (!formData.deliveryDate || !formData.deliveryTime) {
         alert("Por favor, selecione a data e o horário de entrega.");
         return;
     }
 
-    // Capture todos os detalhes do pedido antes de limpar a cesta
     const orderDetails = {
-      basket: [...basket], // Crie uma cópia do basket atual
-      formData: { ...formData }, // Crie uma cópia dos dados do formulário
+      basket: [...basket],
+      formData: { ...formData },
       total: total,
-      orderId: Math.floor(Math.random() * 1000000), // Simula um ID de pedido
+      orderId: Math.floor(Math.random() * 1000000),
       orderDate: new Date().toISOString().split('T')[0],
     };
 
     console.log("Pedido Finalizado!", orderDetails);
-    alert("Seu pedido foi finalizado com sucesso!"); // Mantido para feedback imediato
+    alert("Seu pedido foi finalizado com sucesso! Data de entrega: " + formData.deliveryDate + " às " + formData.deliveryTime);
 
-    clearBasket(); // <-- CHAMA A FUNÇÃO PARA LIMPAR A CESTA
+    clearBasket();
 
-    // Redireciona para a página de confirmação, passando os detalhes do pedido via state
     navigate('/confirmacao-pedido', { state: { orderDetails } });
   };
 
@@ -66,7 +70,6 @@ export default function CheckoutPage() {
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
-      {/* ... (resto do seu JSX da CheckoutPage) ... */}
       <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">Finalizar Pedido</h1>
 
       {basket.length === 0 ? (
@@ -91,6 +94,13 @@ export default function CheckoutPage() {
                     <span className="font-medium">{item.product.name}</span> (x{item.quantity})
                     <span className="text-gray-600 ml-2">R$ {(item.product.price * item.quantity).toFixed(2)}</span>
                   </div>
+                  {/* NOVO BOTÃO REMOVER AQUI */}
+                  <button
+                    onClick={() => handleRemove(item.product.id)} // Chama a função handleRemove do contexto
+                    className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 text-sm ml-4"
+                  >
+                    Remover
+                  </button>
                 </li>
               ))}
             </ul>
@@ -98,11 +108,11 @@ export default function CheckoutPage() {
             <p className="font-bold text-2xl text-right text-purple-700">Total: R$ {total.toFixed(2)}</p>
           </div>
 
-          {/* Coluna de Informações de Entrega e Pagamento */}
+          {/* Coluna de Informações de Entrega e Pagamento (mantida) */}
           <div className="bg-white p-6 rounded-xl shadow-md">
             <h2 className="text-2xl font-semibold mb-4 text-gray-700">Dados de Entrega</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Campos de Nome, Endereço, Cidade, CEP, Email, Telefone */}
+              {/* Campos existentes: Nome, Endereço, Cidade, CEP, Email, Telefone, Data/Hora, Observações */}
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nome Completo</label>
                 <input
@@ -178,7 +188,6 @@ export default function CheckoutPage() {
                 />
               </div>
 
-              {/* Campos: Data e Hora de Entrega */}
               <h3 className="text-xl font-semibold mt-6 mb-2 text-gray-700">Data e Hora de Entrega</h3>
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -206,6 +215,19 @@ export default function CheckoutPage() {
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
+              </div>
+
+              <div>
+                <label htmlFor="observations" className="block text-sm font-medium text-gray-700">Observações do Pedido (Ex: "Vinho na frente", "Não tocar a campainha")</label>
+                <textarea
+                  id="observations"
+                  name="observations"
+                  value={formData.observations}
+                  onChange={handleChange}
+                  rows="4"
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500 resize-y"
+                  placeholder="Digite aqui quaisquer instruções especiais ou observações..."
+                ></textarea>
               </div>
 
               <h3 className="text-xl font-semibold mt-6 mb-2 text-gray-700">Método de Pagamento</h3>
