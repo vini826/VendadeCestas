@@ -1,9 +1,10 @@
 // src/pages/CheckoutPage.jsx
 import React, { useState } from 'react';
 import { useBasket } from '../context/BasketContext';
-import { useNavigate, Link } from 'react-router-dom'; // <-- Importe Link aqui!
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function CheckoutPage() {
+  // Pegue as funções handleIncrementQuantity e handleDecrementQuantity do contexto
   const { basket, handleRemove, handleIncrementQuantity, handleDecrementQuantity, clearBasket } = useBasket();
   const navigate = useNavigate();
 
@@ -67,6 +68,11 @@ export default function CheckoutPage() {
     return today.toISOString().split('T')[0];
   };
 
+  // Função para lidar com a modificação da cesta personalizada (replicada do Basket.jsx)
+  const handleModifyCustomBasket = (basketToModify) => {
+    navigate('/monte-sua-cesta', { state: { customBasketToEdit: basketToModify } });
+  };
+
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">Finalizar Pedido</h1>
@@ -74,14 +80,14 @@ export default function CheckoutPage() {
       {basket.length === 0 ? (
         <div className="text-center bg-white p-8 rounded-xl shadow-md max-w-md mx-auto">
           <p className="text-gray-600 text-lg mb-4">Sua cesta está vazia. Adicione produtos para finalizar o pedido.</p>
-          <div className="flex flex-col space-y-4"> {/* Adicionado um flex container para os botões */}
+          <div className="flex flex-col space-y-4">
             <button
               onClick={() => navigate('/monte-sua-cesta')}
               className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300"
             >
               Voltar para Montar Cesta
             </button>
-            <Link // <-- NOVO BOTÃO: Ir para a página inicial
+            <Link
               to="/"
               className="bg-gray-300 text-gray-800 px-6 py-2 rounded-lg hover:bg-gray-400 transition duration-300"
             >
@@ -96,22 +102,70 @@ export default function CheckoutPage() {
             <h2 className="text-2xl font-semibold mb-4 text-gray-700">Revisão do Pedido</h2>
             <ul className="space-y-3 mb-4">
               {basket.map((item) => (
-                <li key={item.product.id} className="flex justify-between items-center border-b pb-2">
-                  <div>
-                    <span className="font-medium">{item.product.name}</span> (x{item.quantity})
-                    <span className="text-gray-600 ml-2">R$ {(item.product.price * item.quantity).toFixed(2)}</span>
+                <li key={item.product.id} className="flex flex-col items-start border-b pb-2">
+                  <div className="w-full flex justify-between items-center mb-1">
+                    <span className="font-semibold">{item.product.name}</span> (x{item.quantity})
+                    <span className="ml-2 text-gray-600">
+                      R$ {(item.product.price * item.quantity).toFixed(2)}
+                    </span>
                   </div>
-                  <button
-                    onClick={() => handleRemove(item.product.id)}
-                    className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 text-sm ml-4"
-                  >
-                    Remover
-                  </button>
+                  
+                  {/* LÓGICA PARA EXIBIR INGREDIENTES DE CESTAS PERSONALIZADAS */}
+                  {item.product.type === 'custom_basket' && item.product.ingredients && item.product.ingredients.length > 0 && (
+                    <div className="text-sm text-gray-500 w-full mb-2 border-l pl-2 ml-4">
+                      <span className="font-medium block mb-1">Conteúdo:</span>
+                      <ul className="list-disc pl-4">
+                        {item.product.ingredients.map(ingredient => (
+                          <li key={ingredient.product.id}>
+                            {ingredient.product.name} (x{ingredient.quantity})
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* CONTROLES DE QUANTIDADE E BOTÕES DE AÇÃO - REPLICADO DO BASKET.JSX */}
+                  <div className="w-full flex justify-end items-center space-x-2 mt-2"> {/* Adicionado mt-2 para espaçamento */}
+                    {/* Botões de quantidade +/-: Aparecem para todos os tipos de itens */}
+                    <>
+                      <button
+                        onClick={() => handleDecrementQuantity(item.product.id)}
+                        className="bg-gray-200 text-gray-700 px-2 py-1 rounded hover:bg-gray-300"
+                      >
+                        -
+                      </button>
+                      <span className="font-bold text-lg">{item.quantity}</span>
+                      <button
+                        onClick={() => handleIncrementQuantity(item.product.id)}
+                        className="bg-gray-200 text-gray-700 px-2 py-1 rounded hover:bg-gray-300"
+                      >
+                        +
+                      </button>
+                    </>
+                    
+                    {/* Botão Modificar Cesta Personalizada (só para custom_basket) */}
+                    {item.product.type === 'custom_basket' && (
+                      <button
+                        onClick={() => handleModifyCustomBasket(item.product)}
+                        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
+                      >
+                        Modificar
+                      </button>
+                    )}
+
+                    {/* Botão Remover sempre aparece */}
+                    <button
+                      onClick={() => handleRemove(item.product.id)}
+                      className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 ml-4"
+                    >
+                      Remover
+                    </button>
+                  </div>
                 </li>
               ))}
             </ul>
             <hr className="my-4" />
-            <p className="font-bold text-2xl text-right text-purple-700">Total: R$ {total.toFixed(2)}</p>
+            <p className="font-bold text-2xl text-right text-red-700">Total: R$ {total.toFixed(2)}</p>
           </div>
 
           {/* Coluna de Informações de Entrega e Pagamento (mantida) */}

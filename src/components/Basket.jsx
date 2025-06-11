@@ -17,7 +17,6 @@ export default function Basket({
     0
   );
 
-  // Função para lidar com a modificação da cesta personalizada
   const handleModifyCustomBasket = (basketToModify) => {
     navigate('/monte-sua-cesta', { state: { customBasketToEdit: basketToModify } });
   };
@@ -55,8 +54,7 @@ export default function Basket({
               )}
 
               <div className="w-full flex justify-end items-center space-x-2">
-                {/* BOTÕES DE QUANTIDADE +/-: AGORA APARECEM PARA TODOS OS TIPOS DE ITENS */}
-                <> {/* Removida a condição item.product.type !== 'custom_basket' */}
+                <>
                   <button
                     onClick={() => onDecrementQuantity(item.product.id)}
                     className="bg-gray-200 text-gray-700 px-2 py-1 rounded hover:bg-gray-300"
@@ -71,8 +69,7 @@ export default function Basket({
                     +
                   </button>
                 </>
-                
-                {/* Botão Modificar Cesta Personalizada (só para custom_basket) */}
+
                 {item.product.type === 'custom_basket' && (
                   <button
                     onClick={() => handleModifyCustomBasket(item.product)}
@@ -82,7 +79,6 @@ export default function Basket({
                   </button>
                 )}
 
-                {/* Botão Remover sempre aparece */}
                 <button
                   onClick={() => onRemove(item.product.id)}
                   className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 ml-4"
@@ -95,7 +91,8 @@ export default function Basket({
         </ul>
       )}
       <hr className="my-4" />
-      <p className="font-bold text-xl mb-4">{customTotalMessage || `Total: R$ ${total.toFixed(2)}`}</p>
+      {/* Cor do Total da Cesta */}
+      <p className="font-bold text-xl mb-4 text-green-700">{customTotalMessage || `Total: R$ ${total.toFixed(2)}`}</p> {/* MUDANÇA AQUI: text-red-700 */}
 
       {!hideCheckoutButton && basket.length > 0 && (
         <button

@@ -1,48 +1,39 @@
 // src/components/PreBuiltBasketCard.jsx
 import React from 'react';
-import { useBasket } from '../context/BasketContext';
+import { Link } from 'react-router-dom';
 
 export default function PreBuiltBasketCard({ basket }) {
-  const { handleAdd } = useBasket();
-
-  const handleAddBasket = () => {
-    // Adiciona todos os produtos da cesta ao carrinho
-    basket.products.forEach((product) => {
-      // Verifica se o produto já existe no carrinho
-      const existingItem = basket.find(item => item.product.id === product.id);
-      if (existingItem) {
-        // Se existir, atualiza a quantidade
-        for (let i = 0; i < product.quantity; i++) {
-          handleAdd(product);
-        }
-      } else {
-        // Se não existir, adiciona o produto com a quantidade especificada
-        for (let i = 0; i < product.quantity; i++) {
-          handleAdd(product);
-        }
-      }
-    });
-  };
-
   return (
-    <div className="bg-white rounded-xl shadow-md overflow-hidden">
-      <div className="p-4">
-        <h2 className="text-xl font-bold mb-2">{basket.name}</h2>
-        <p className="text-gray-600 mb-2">R$ {basket.price.toFixed(2)}</p>
-        <ul className="list-disc pl-5 text-gray-700">
-          {basket.products.map((product) => (
-            <li key={product.id}>
-              {product.name} (x{product.quantity})
+    <div className="bg-white rounded-xl shadow-md overflow-hidden flex flex-col justify-between">
+      <img
+        src={basket.image}
+        alt={basket.name}
+        className="w-full h-48 object-cover"
+        onError={(e) => { e.target.onerror = null; e.target.src="https://via.placeholder.com/400x300?text=Cesta"; }}
+      />
+      <div className="p-4 flex-grow">
+        <h2 className="text-xl font-bold mb-2 text-red-700">{basket.name}</h2>
+        <p className="text-gray-600 mb-2">{basket.description.substring(0, 100)}...</p>
+        <p className="text-xl font-semibold text-green-600">R$ {basket.price.toFixed(2)}</p>
+        
+        <h4 className="font-semibold text-gray-700 mt-4 mb-2">Itens Principais:</h4>
+        <ul className="list-disc pl-5 text-gray-600 text-sm">
+          {basket.products && basket.products.slice(0, 3).map(item => (
+            <li key={item.id}>
+              {item.name} (x{item.quantity})
             </li>
           ))}
+          {basket.products && basket.products.length > 3 && <li className="text-gray-500">...e mais</li>}
         </ul>
       </div>
-      <button
-        onClick={handleAddBasket}
-        className="w-full bg-green-500 text-white font-bold py-2 hover:bg-green-600 transition duration-300 block"
-      >
-        Adicionar Cesta
-      </button>
+      <div className="p-4 pt-0">
+        <Link
+          to={`/cestas/${basket.id}`} // CORREÇÃO: Comentário fora das chaves {}
+          className="w-full bg-red-700 text-white font-bold py-2 rounded-lg hover:bg-red-800 transition duration-300 block text-center"
+        >
+          Ver Detalhes
+        </Link>
+      </div>
     </div>
   );
 }

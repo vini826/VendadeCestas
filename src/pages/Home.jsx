@@ -28,7 +28,6 @@ export default function Home() {
   }, [customBasketToEdit]);
 
 
-  // --- Funções para MANIPULAR A CESTA TEMPORÁRIA (tempBasket) ---
   const handleAddTemp = (productToAdd) => {
     setTempBasket(prevTempBasket => {
       const existingItemIndex = prevTempBasket.findIndex(
@@ -58,30 +57,23 @@ export default function Home() {
     );
   };
 
-  // CORREÇÃO AQUI: handleDecrementQuantityTemp
   const handleDecrementQuantityTemp = (productIdToDecrement) => {
     setTempBasket(prevTempBasket => {
-      // Cria uma nova cesta para evitar mutação direta
       const newTempBasket = prevTempBasket.map((item) => {
         if (item.product.id === productIdToDecrement) {
-          // Garante que a quantidade nunca seja menor que 1.
-          // Se a quantidade é 1, permanece 1 (a remoção total é feita com o botão "Remover").
           return { ...item, quantity: Math.max(1, item.quantity - 1) };
         }
         return item;
       });
-      // Retorna a nova cesta
-      return newTempBasket; // <-- Certifique-se que o array é retornado corretamente
+      return newTempBasket;
     });
   };
-
 
   const handleRemoveTemp = (productIdToRemove) => {
     setTempBasket(prevTempBasket =>
       prevTempBasket.filter((item) => item.product.id !== productIdToRemove)
     );
   };
-  // --- Fim das Funções da Cesta Temporária ---
 
 
   const tempBasketTotal = tempBasket.reduce(
@@ -142,14 +134,15 @@ export default function Home() {
           <Basket
             basket={tempBasket}
             onIncrementQuantity={handleIncrementQuantityTemp}
-            onDecrementQuantity={handleDecrementQuantityTemp} // ESTA FUNÇÃO É CHAMADA
+            onDecrementQuantity={handleDecrementQuantityTemp}
             onRemove={handleRemoveTemp}
             hideCheckoutButton={true}
             customTotalMessage={`Total da Cesta (mín. R$ ${MIN_BASKET_VALUE.toFixed(2)}): R$ ${tempBasketTotal.toFixed(2)}`}
           />
           <button
             onClick={handleSaveCustomBasket}
-            className={`w-full font-bold py-3 rounded-lg transition duration-300 text-lg ${isSaveBasketButtonActive ? 'bg-purple-600 hover:bg-purple-700 text-white' : 'bg-gray-400 text-gray-700 cursor-not-allowed'}`}
+            // MUDANÇA AQUI: cores do botão Salvar Minha Cesta
+            className={`w-full font-bold py-3 rounded-lg transition duration-300 text-lg ${isSaveBasketButtonActive ? 'bg-red-700 hover:bg-red-800 text-white' : 'bg-gray-400 text-gray-700 cursor-not-allowed'}`}
             disabled={!isSaveBasketButtonActive}
           >
             {editingBasketId ? 'Atualizar Cesta' : 'Salvar Minha Cesta'}

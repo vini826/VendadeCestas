@@ -2,11 +2,11 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useBasket } from '../context/BasketContext';
-import preBuiltBaskets from '../data/preBuiltBaskets'; // Importe os dados das cestas
+import preBuiltBaskets from '../data/preBuiltBaskets';
 
 export default function BasketDetailPage() {
   const { id } = useParams();
-  const { handleAdd } = useBasket(); // Pega a função handleAdd do contexto do carrinho
+  const { handleAdd } = useBasket();
 
   const basketId = parseInt(id, 10);
   const basket = preBuiltBaskets.find(b => b.id === basketId);
@@ -23,25 +23,25 @@ export default function BasketDetailPage() {
     );
   }
 
-  // CORREÇÃO: handleAddFullBasket agora adiciona a cesta pré-montada como um ÚNICO ITEM
   const handleAddFullBasket = () => {
-    // Passa o objeto 'basket' completo para a função handleAdd
-    // A função handleAdd (no contexto) vai tratar 'basket' como um 'product' (com id, name, price)
     handleAdd(basket);
     alert(`Cesta "${basket.name}" adicionada ao carrinho!`);
   };
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen flex flex-col items-center">
-      <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">{basket.name}</h1>
+      {/* Mude a cor do título aqui para vermelho se quiser */}
+      <h1 className="text-3xl font-bold mb-6 text-center text-red-800">{basket.name}</h1>
       
       <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-4xl flex flex-col md:flex-row items-center md:items-start gap-8">
         {/* Imagem da Cesta */}
         <div className="md:w-1/2 flex justify-center">
           <img
+            // CERTIFIQUE-SE QUE ESTA URL É VÁLIDA E PODE SER ACESSADA EXTERNAMENTE
             src={basket.image}
             alt={basket.name}
             className="rounded-lg shadow-lg w-full max-w-sm h-auto object-cover"
+            onError={(e) => { e.target.onerror = null; e.target.src="https://via.placeholder.com/400x300?text=Imagem+Nao+Encontrada"; }} // Fallback para imagem quebrada
           />
         </div>
 
@@ -51,15 +51,16 @@ export default function BasketDetailPage() {
           
           <h2 className="text-xl font-semibold text-gray-800 mb-2">Conteúdo da Cesta:</h2>
           <ul className="list-disc pl-5 mb-4 text-gray-600 self-start">
-            {/* Aqui você lista os produtos que compõem a cesta, apenas para informação */}
+            {/* CORREÇÃO AQUI: Acessar item.name e item.quantity diretamente */}
+            {/* Adicionado verificação item?.name para segurança */}
             {basket.products && basket.products.map(item => (
-              <li key={item.id}>
-                {item.name} (x{item.quantity})
+              <li key={item.id || Math.random()}> {/* Fallback para key */}
+                {item.name || 'Nome Desconhecido'} (x{item.quantity}) {/* Fallback para nome */}
               </li>
             ))}
           </ul>
 
-          <p className="text-3xl font-bold text-purple-700 mb-6">Total: R$ {basket.price.toFixed(2)}</p>
+          <p className="text-3xl font-bold text-green-700 mb-6">Total: R$ {basket.price.toFixed(2)}</p> {/* Mudei a cor do total para vermelho */}
           
           <button
             onClick={handleAddFullBasket}
@@ -70,7 +71,8 @@ export default function BasketDetailPage() {
         </div>
       </div>
 
-      <Link to="/" className="mt-8 bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-300">
+      {/* Mude a cor do botão Voltar para Página Inicial aqui para vermelho */}
+      <Link to="/" className="mt-8 bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600 transition duration-300">
         Voltar para a Página Inicial
       </Link>
     </div>

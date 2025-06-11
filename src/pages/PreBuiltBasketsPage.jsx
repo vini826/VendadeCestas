@@ -1,20 +1,30 @@
-// src/data/preBuiltBaskets.js
-import products from './products'; // Importe a lista de produtos completa
+// src/pages/PreBuiltBasketsPage.jsx
+import React from 'react';
+import { Link } from 'react-router-dom';
+import PreBuiltBasketCard from '../components/PreBuiltBasketCard'; // Será usado para exibir cada cesta
+import preBuiltBaskets from '../data/preBuiltBaskets'; // Importe os dados
 
-const preBuiltBaskets = [
-  {
-    id: 101,
-    name: 'Cesta Romântica',
-    price: 150.00, // <-- O PREÇO É DA CESTA INTEIRA
-    description: 'Uma seleção apaixonante de chocolates finos, um vinho tinto suave e lindas flores vermelhas para celebrar o amor.',
-    image: 'https://via.placeholder.com/400x300/e0b0ff/FFFFFF?text=Cesta+Romantica',
-    products: [ // Lista de ingredientes para exibição
-      { ...products.find(p => p.id === 1), quantity: 3 },
-      { ...products.find(p => p.id === 6), quantity: 1 },
-      { ...products.find(p => p.id === 7), quantity: 1 },
-    ],
-  },
-  // ... outras cestas
-];
-
-export default preBuiltBaskets;
+export default function PreBuiltBasketsPage() {
+  return (
+    <div className="p-6 bg-gray-100 min-h-screen">
+      <h1 className="text-3xl font-bold mb-4 text-center text-gray-800">Nossas Cestas Prontas</h1>
+      <p className="text-lg text-gray-600 mb-8 text-center max-w-2xl mx-auto">
+        Conheça todas as nossas opções de cestas já montadas, perfeitas para todas as ocasiões!
+      </p>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        {preBuiltBaskets.map((basket) => (
+          // O PreBuiltBasketCard terá um link para a BasketDetailPage
+          <PreBuiltBasketCard key={basket.id} basket={basket} />
+        ))}
+      </div>
+      <div className="mt-8 text-center">
+        <Link
+          to="/"
+          className="bg-gray-300 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-400 transition duration-300"
+        >
+          Voltar para a Página Inicial
+        </Link>
+      </div>
+    </div>
+  );
+}

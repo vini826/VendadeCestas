@@ -7,7 +7,7 @@ const preBuiltBaskets = [
     name: 'Cesta Romântica',
     price: 150.00,
     description: 'Uma seleção apaixonante de chocolates finos, um vinho tinto suave e lindas flores vermelhas para celebrar o amor.',
-    image: 'https://via.placeholder.com/400x300/e0b0ff/FFFFFF?text=Cesta+Romantica',
+    image: 'https://cdn.awsli.com.br/600x700/601/601454/produto/51355731/5d66935e27.jpg',
     products: [
       // ATENÇÃO AQUI: Cada item é o PRODUTO COMPLETO do seu products.js, MAIS a quantidade
       { ...products.find(p => p.id === 1), quantity: 3 }, // id 1 = Chocolate (exemplo)

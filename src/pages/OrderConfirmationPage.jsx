@@ -56,7 +56,7 @@ export default function OrderConfirmationPage() {
         </div>
 
         <hr className="my-4" />
-        <p className="font-bold text-3xl text-right text-purple-700">Total: R$ {total.toFixed(2)}</p>
+        <p className="font-bold text-3xl text-right text-green-700">Total: R$ {total.toFixed(2)}</p>
       </div>
 
       <Link to="/" className="bg-blue-500 text-white px-8 py-4 rounded-lg hover:bg-blue-600 transition duration-300 font-semibold text-lg">
